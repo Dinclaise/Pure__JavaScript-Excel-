@@ -11,7 +11,7 @@
         "comma-dangle": "off",
         "require-jsdoc": "off",
         "object-curly-spacing": "off",
-        "indent": ["error", 2],
+        "indent": ["error", 4],
         "linebreak-style": "off"
     },
 
