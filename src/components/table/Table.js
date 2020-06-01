@@ -1,12 +1,13 @@
 import { ExcelComponent } from '@core/ExcelComponent';
 import { createTable } from './table.template';
+import { $ } from '../../core/dom';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table';
 
     constructor($root) {
         super($root, {
-            // listeners: ['click', 'mousedown', 'mousemove', 'mouseup']
+            listeners: ['mousedown', 'mousemove']
         })
     }
 
@@ -14,11 +15,20 @@ export class Table extends ExcelComponent {
         return createTable(25);
     }
 
-    // onClick() {}
+    onMousedown(event) {
+        // const resize = event.target.dataset.resize;
+        const $resizer = $(event.target);
+        const $parent = $resizer.closest('[data-type="resizable"');
+        const coords = $parent.getCoords()
 
-    // onMousedown() {}
+        document.onmousemove = e => {
+            const delta = e.pageX - coords.right;
+            const value = coords.width + delta;
+            $parent.$el.style.width = value + 'px';
+        }
 
-    // onMousemove() {}
-
-    // onMouseup() {}
+        document.onmouseup = e => {
+            document.onmousemove = null;
+        }
+    }
 }
