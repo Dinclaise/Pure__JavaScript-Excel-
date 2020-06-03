@@ -13,7 +13,8 @@
         "object-curly-spacing": "off",
         "indent": ["error", 4],
         "linebreak-style": "off",
-        "operator-linebreak": "off"
+        "operator-linebreak": "off",
+        "max-len": ["error", { "code": 120 }]
     },
 
     "extends": ["eslint:recommended", "google"]
