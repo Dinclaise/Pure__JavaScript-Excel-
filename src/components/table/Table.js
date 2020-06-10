@@ -10,12 +10,15 @@ import { nextSelector } from '../table/table.function';
 export class Table extends ExcelComponent {
     static className = 'excel__table';
 
-    constructor($root) {
+    constructor($root, options) {
         super($root, {
-            listeners: ['mousedown', 'mousemove', 'keydown']
+            name: 'Table',
+            listeners: ['mousedown', 'mousemove', 'keydown', 'input'],
+            ...options
         })
     }
 
+    // Return template of component
     toHTML() {
         return createTable(25);
     }
@@ -26,8 +29,21 @@ export class Table extends ExcelComponent {
 
     init() {
         super.init();
-        const $cell = this.$root.find('[data-id="0:0"]');
+        this.selectCell(this.$root.find('[data-id="0:0"]'));
+
+        this.$on('it is working', text => {
+            this.$el.current.text(text);
+            console.log('formula: input', text);
+        })
+
+        this.$on('formula: done', () => {
+            this.selection.current.focus();
+        })
+    }
+
+    selectCell($cell) {
         this.selection.select($cell);
+        this.$emit('table:select', $cell);
     }
 
     onMousedown(event) {
@@ -67,8 +83,12 @@ export class Table extends ExcelComponent {
 
             const id = this.selection.current.id(true);
             const $next = this.$root.find(nextSelector(key, id))
-            this.selection.select($next)
+            this.selectCell($next);
         }
+    }
+
+    onInput() {
+        this.$emit('table:input', $(event.target))
     }
 }
 
